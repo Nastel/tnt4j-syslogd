@@ -9,8 +9,8 @@
   <!-- Import default properties for jKool builds --> 
   <import file="${root}/build-properties.xml"/>
 
-  <property name="package"   value="com.jkool.jesl.net.*"/>
-  <property name="docpkg"    value="com.jkool.jesl.net.*"/>
+  <property name="package"   value="com.jkool.jesl.net.syslogd.*"/>
+  <property name="docpkg"    value="com.jkool.jesl.net.syslogd.*"/>
   <property name="src"       value="src"/>
   <property name="lib"       value="lib"/>
   <property name="scripts"   value="bin"/>
@@ -88,9 +88,7 @@
   </target>
 
   <target name="tnt4j-syslogd" depends="doc" description="build package for distribution">
-    <echo message="Deleting old archives" level="info"/>
-    <delete dir="${project-build}" includes="*.jar"/>
-    
+  
     <echo message="Copying README and LICENSE info" level="info"/>
 	<copy todir="${project-build}">
       <fileset dir="${root}">
@@ -105,6 +103,7 @@
 			<include name="tnt4j.properties"/>
 		</fileset>
 	</copy>
+
 	<echo message="Copying Shell Scripts" level="info"/>
 	<copy todir="${project-build}/bin">
 		<fileset dir="${scripts}">

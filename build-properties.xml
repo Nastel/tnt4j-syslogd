@@ -3,7 +3,6 @@
 <project name="SyslogBuildProps">
   <!-- Installation package directories -->
   <property name="project-build"       value="${basedir}/../build/tnt4j-syslogd"/>
-  <property name="project-install"     value="${project-build}/install"/>
   
   <!-- Default compilation settings -->
   <property name="target"     value="1.6"/>
