@@ -25,4 +25,4 @@ where `jksysd.json` is JSON output of JESL syslog daemon.
 	
 That should do it.
 
-<b>NOTE:</b> JESL currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+<b>NOTE:</b> Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
