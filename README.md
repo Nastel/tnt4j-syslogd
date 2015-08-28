@@ -26,3 +26,10 @@ where `jksysd.json` is JSON output of JESL syslog daemon.
 That should do it.
 
 <b>NOTE:</b> Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
+
+# Project Dependencies
+* JDK 1.6+
+* TNT4J (https://github.com/Nastel/TNT4J)
+* Syslog4j (http://syslog4j.org/)
+* Joda Time (http://www.joda.org/joda-time/)
+* GSON (https://github.com/google/gson)
