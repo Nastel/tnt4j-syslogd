@@ -20,6 +20,9 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.StringTokenizer;
 
 import org.productivity.java.syslog4j.Syslog;
 import org.productivity.java.syslog4j.SyslogConfigIF;
@@ -66,12 +69,17 @@ public class SyslogSend {
 		System.out.println("-q             do not write anything to standard out");
 		System.out.println();
 		System.out.println("protocol       Syslog protocol implementation");
-		System.out.println("message        syslog message text");
+		System.out.println("message        syslog message text. PCI messages can be sent using this format:");
+		System.out.println("               #pci(userId=?,eventType=?,status=?,origination=?,affectedResource=?)");
+		System.out.println("               (? should be replaced by appropriate values):");
 		System.out.println();
 		System.out.println("Notes:");
 		System.out.println();
 		System.out.println("Additional message arguments will be concatenated into the same");
 		System.out.println("syslog message; will only send one message per call.");
+		System.out.println();
+		System.out.println("Sending PCI messages:");
+		System.out.println("Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
 		System.out.println();
 		System.out.println("If the message argument is ommited, lines will be taken from the");
 		System.out.println("standard input.");
@@ -108,6 +116,7 @@ public class SyslogSend {
 				}
 				match = true;
 				sendOptions.level = args[i++];
+				sendOptions.sysLevel = SyslogUtility.getLevel(sendOptions.level);
 			}
 			if ("-f".equals(arg)) {
 				if (i == args.length) {
@@ -213,7 +222,11 @@ public class SyslogSend {
 				System.out.println("Sending " + sendOptions.facility + "." + sendOptions.level + " message \""
 				        + sendOptions.message + "\"");
 			}
-			syslog.log(level, sendOptions.message);
+			if (!sendOptions.message.startsWith("#pci(")) {
+				syslog.log(level, sendOptions.message);
+			} else {
+				sendPCIEvent(syslog, sendOptions);
+			}
 		} else {
 			sendFromTextFile(syslog, sendOptions);
 		}
@@ -221,6 +234,21 @@ public class SyslogSend {
 		if (shutdown) {
 			Syslog.shutdown();
 		}
+	}
+
+	private static void sendPCIEvent(SyslogIF syslog, SendOptions sendOptions) {
+		StringTokenizer tk = new StringTokenizer(sendOptions.message, "(),"); 
+		Map<String, String> pciMap = new HashMap<String, String>();
+		while (tk.hasMoreTokens()) {
+			String token = tk.nextToken();
+			if (token.startsWith("#pci")) continue;
+			String [] pair = token.split("=");
+			pciMap.put(pair[0], pair[1]);
+		}
+		PCILogMessage pcimsg = new PCILogMessage(pciMap);
+		syslog.log(sendOptions.sysLevel, pcimsg);
+		System.out.println("Sent " + sendOptions.facility + "." + sendOptions.level + " message \""
+		        + pcimsg.createMessage() + "\"");
 	}
 
 	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions) throws IOException, InterruptedException {
@@ -296,4 +324,5 @@ class SendOptions {
 	String fileName = null;
 	boolean quiet = false;
 	String usage = null;
+	int sysLevel = SyslogUtility.getLevel(level);
 }

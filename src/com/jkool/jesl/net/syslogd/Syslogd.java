@@ -51,6 +51,7 @@ import org.productivity.java.syslog4j.util.SyslogUtility;
  * <tr><td><b>cid</b></td><td>Correlator for relating events across threads, applications, servers</td></tr>
  * <tr><td><b>tag</b></td><td>User defined tag</td></tr>
  * <tr><td><b>loc</b></td><td>Location specifier</td></tr>
+ * <tr><td><b>exc</b></td><td>Exception string</td></tr>
  * <tr><td><b>opn</b></td><td>Event/Operation name</td></tr>
  * <tr><td><b>opt</b></td><td>Event/Operation Type</td></tr>
  * <tr><td><b>rsn</b></td><td>Resource name on which operation/event took place</td></tr>

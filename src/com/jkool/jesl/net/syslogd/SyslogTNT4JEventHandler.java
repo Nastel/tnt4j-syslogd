@@ -35,6 +35,7 @@ import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
 import com.nastel.jkool.tnt4j.core.PropertySnapshot;
+import com.nastel.jkool.tnt4j.logger.AppenderConstants;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceFactory;
 import com.nastel.jkool.tnt4j.source.SourceType;
@@ -65,6 +66,7 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>cid</b></td>				<td>Correlator for relating events across threads, applications, servers</td></tr>
  * <tr><td><b>tag</b></td>				<td>User defined tag</td></tr>
  * <tr><td><b>loc</b></td>				<td>Location specifier</td></tr>
+ * <tr><td><b>exc</b></td>				<td>Exception string</td></tr>
  * <tr><td><b>opn</b></td>			    <td>Event/Operation name</td></tr>
  * <tr><td><b>opt</b></td>			    <td>Event/Operation Type - Value must be either a member of {@link OpType} or the equivalent numeric value</td></tr>
  * <tr><td><b>rsn</b></td>				<td>Resource name on which operation/event took place</td></tr>
@@ -215,20 +217,22 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue().toString();
-			if (key.equalsIgnoreCase("cid")) {
+			if (key.equalsIgnoreCase(AppenderConstants.PARAM_CORRELATOR_LABEL)) {
 				tevent.setCorrelator(value);
-			} else if (key.equalsIgnoreCase("tag")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_TAG_LABEL)) {
 				tevent.setTag(value);
-			} else if (key.equalsIgnoreCase("loc")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_LOCATION_LABEL)) {
 				tevent.setLocation(value);
-			} else if (key.equalsIgnoreCase("res")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_RESOURCE_LABEL)) {
 				tevent.getOperation().setResource(value);
-			} else if (key.equalsIgnoreCase("usr")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_USER_LABEL)) {
 				tevent.getOperation().setUser(value);
-			} else if (key.equalsIgnoreCase("opt")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_OP_TYPE_LABEL)) {
 				tevent.getOperation().setType(OpType.valueOf(value));
-			} else if (key.equalsIgnoreCase("opn")) {
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_OP_NAME_LABEL)) {
 				tevent.getOperation().setName(value);
+			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_EXCEPTION_LABEL)) {
+				tevent.getOperation().setException(value);
 			} 
 		}
 		return tevent;
