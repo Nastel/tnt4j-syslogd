@@ -133,7 +133,6 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 
 		TrackingEvent tevent = logger.newEvent(facility, event.getMessage());
 		tevent.getOperation().setSeverity(level);
-		tevent.getOperation().setType(OpType.DATAGRAM);
 		tevent.setLocation(event.getHost());
 		tevent.setCharset(config.getConfig().getCharSet());
 		
@@ -170,7 +169,6 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		tevent.getOperation().setTID(pid);
 		tevent.getOperation().setResource(appName);
 		tevent.getOperation().setName(appName + "/" + facility);
-		tevent.getOperation().setType(OpType.DATAGRAM);
 
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
@@ -195,7 +193,6 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		tevent.getOperation().setResource(sevent.getApplicationName());
 		tevent.getOperation().setName(sevent.getApplicationName() + "/" + facility);
 		tevent.setTag(sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
-		tevent.getOperation().setType(OpType.DATAGRAM);
 		assignPid(sevent, tevent);			
 		
 		// set the appropriate source
@@ -224,7 +221,6 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			String value = entry.getValue().toString();
 			if (key.equalsIgnoreCase(AppenderConstants.PARAM_CORRELATOR_LABEL)) {
 				tevent.setCorrelator(value);
-				tevent.getOperation().setType(OpType.EVENT);
 			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_TAG_LABEL)) {
 				tevent.setTag(value);
 			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_LOCATION_LABEL)) {
