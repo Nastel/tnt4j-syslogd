@@ -219,21 +219,21 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue().toString();
-			if (key.equalsIgnoreCase(AppenderConstants.PARAM_CORRELATOR_LABEL)) {
+			if (key.equals(AppenderConstants.PARAM_CORRELATOR_LABEL)) {
 				tevent.setCorrelator(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_TAG_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_TAG_LABEL)) {
 				tevent.setTag(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_LOCATION_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_LOCATION_LABEL)) {
 				tevent.setLocation(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_RESOURCE_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_RESOURCE_LABEL)) {
 				tevent.getOperation().setResource(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_USER_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_USER_LABEL)) {
 				tevent.getOperation().setUser(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_OP_TYPE_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_OP_TYPE_LABEL)) {
 				tevent.getOperation().setType(OpType.valueOf(value));
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_OP_NAME_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_OP_NAME_LABEL)) {
 				tevent.getOperation().setName(value);
-			} else if (key.equalsIgnoreCase(AppenderConstants.PARAM_EXCEPTION_LABEL)) {
+			} else if (key.equals(AppenderConstants.PARAM_EXCEPTION_LABEL)) {
 				tevent.getOperation().setException(value);
 			} 
 		}
