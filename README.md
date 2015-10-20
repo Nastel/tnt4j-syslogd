@@ -37,3 +37,6 @@ That should do it.
 * Syslog4j (http://syslog4j.org/)
 * Joda Time (http://www.joda.org/joda-time/)
 * GSON (https://github.com/google/gson)
+
+# Integrations
+* jKoolCloud (https://www.jkoolcloud.com)
