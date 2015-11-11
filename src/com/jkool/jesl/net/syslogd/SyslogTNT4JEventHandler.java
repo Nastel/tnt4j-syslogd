@@ -24,7 +24,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
-import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -38,10 +38,13 @@ import com.nastel.jkool.tnt4j.TrackingLogger;
 import com.nastel.jkool.tnt4j.core.OpLevel;
 import com.nastel.jkool.tnt4j.core.OpType;
 import com.nastel.jkool.tnt4j.core.PropertySnapshot;
+import com.nastel.jkool.tnt4j.dump.SimpleDumpListener;
+import com.nastel.jkool.tnt4j.dump.TimeTrackerDumpProvider;
 import com.nastel.jkool.tnt4j.logger.AppenderConstants;
 import com.nastel.jkool.tnt4j.source.Source;
 import com.nastel.jkool.tnt4j.source.SourceFactory;
 import com.nastel.jkool.tnt4j.source.SourceType;
+import com.nastel.jkool.tnt4j.tracker.TimeTracker;
 import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
 
 /**
@@ -75,8 +78,6 @@ import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>rsn</b></td>				<td>Resource name on which operation/event took place</td></tr>
  * </table>
  * 
- * @see SyslogStats
- * @see SyslogHandlerDumpProvider
  * 
  * @version $Revision: 1$
  */
@@ -86,15 +87,18 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
     protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
     protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
     
-   /*
-    * Timing map maintains the number of nanoseconds since last event for a specific server/application
-    * combo.
-    */
-	private static final ConcurrentHashMap<String, SyslogStats> EVENT_TIMER = new ConcurrentHashMap<String, SyslogStats>(89);
 
-	static {
+    /*
+     * Timing map maintains the number of nanoseconds since last event for a specific server/application
+     * combo.
+     */
+ 	private static final TimeTracker timeTracker;
+
+ 	static {
 		// add a custom dump provider
-		TrackingLogger.addDumpProvider(new SyslogHandlerDumpProvider(SyslogTNT4JEventHandler.class.getName(), EVENT_TIMER));		
+		timeTracker = TimeTracker.newTracker(10000, TimeUnit.DAYS.toMillis(30));
+		TrackingLogger.addDumpProvider(new TimeTrackerDumpProvider(SyslogTNT4JEventHandler.class.getName(), timeTracker));		
+		TrackingLogger.addDumpListener(new SimpleDumpListener(System.out));
 	}
 	
     /*
@@ -145,7 +149,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		// extract name=value pairs if available
 		extractVariables(event, tevent);
 		String locationKey = tevent.getLocation() + "/" + tevent.getOperation().getResource();
-		tevent.stop(date.getTime()*1000, getElapsedNanosSinceLastEvent(locationKey)/1000);
+		tevent.stop(date.getTime()*1000, getUsecSinceLastEvent(locationKey));
 		logger.tnt(tevent);
 	}
 
@@ -391,26 +395,13 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
     }
 
 	/**
-	 * Obtain elapsed nanoseconds since last event
+	 * Obtain elapsed microseconds since last event
 	 * 
 	 * @param key timer key
-	 * @return elapsed nanoseconds since last event
+	 * @return elapsed microseconds since last event
 	 */
-	protected long getElapsedNanosSinceLastEvent(String key) {
-		SyslogStats last = EVENT_TIMER.get(key);
-		if (last == null) {
-			last = EVENT_TIMER.putIfAbsent(key, new SyslogStats(System.nanoTime()));
-			last = last == null? EVENT_TIMER.get(key): last;
-			last.hit();
-			return 0;
-		}	
-		long lastStamp = last.getNanoTime();
-		long now = System.nanoTime();
-		last.updateNanoTime(lastStamp, now);
-		last.hit();
-
-		long elapsedNanos = now - lastStamp;
-		return elapsedNanos < 0? 0: elapsedNanos;
+	protected long getUsecSinceLastEvent(String key) {
+		return TimeUnit.NANOSECONDS.toMicros(timeTracker.hitAndGet(key));
 	}
 
 	@Override
