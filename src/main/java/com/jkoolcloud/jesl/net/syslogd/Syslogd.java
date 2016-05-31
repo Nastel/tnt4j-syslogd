@@ -16,7 +16,7 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package com.jkool.jesl.net.syslogd;
+package com.jkoolcloud.jesl.net.syslogd;
 
 
 import org.productivity.java.syslog4j.server.SyslogServer;
