@@ -22,4 +22,4 @@
  * @author albert
  * @version 1.0
  */
-package com.jkool.jesl.net.syslogd;
+package com.jkoolcloud.jesl.net.syslogd;

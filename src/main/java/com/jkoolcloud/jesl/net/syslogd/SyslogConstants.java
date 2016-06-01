@@ -16,9 +16,9 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package com.jkool.jesl.net.syslogd;
+package com.jkoolcloud.jesl.net.syslogd;
 
-import com.nastel.jkool.tnt4j.core.OpLevel;
+import com.jkoolcloud.tnt4j.core.OpLevel;
 
 /**
  * This interface defines basic syslog constants and mappings.

@@ -16,7 +16,7 @@
  *    Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
  */
 
-package com.jkool.jesl.net.syslogd;
+package com.jkoolcloud.jesl.net.syslogd;
 
 import java.io.IOException;
 import java.net.SocketAddress;
@@ -34,18 +34,18 @@ import org.productivity.java.syslog4j.server.SyslogServerIF;
 import org.productivity.java.syslog4j.server.SyslogServerSessionEventHandlerIF;
 import org.productivity.java.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 
-import com.nastel.jkool.tnt4j.TrackingLogger;
-import com.nastel.jkool.tnt4j.core.OpLevel;
-import com.nastel.jkool.tnt4j.core.OpType;
-import com.nastel.jkool.tnt4j.core.PropertySnapshot;
-import com.nastel.jkool.tnt4j.dump.SimpleDumpListener;
-import com.nastel.jkool.tnt4j.dump.TimeTrackerDumpProvider;
-import com.nastel.jkool.tnt4j.logger.AppenderConstants;
-import com.nastel.jkool.tnt4j.source.Source;
-import com.nastel.jkool.tnt4j.source.SourceFactory;
-import com.nastel.jkool.tnt4j.source.SourceType;
-import com.nastel.jkool.tnt4j.tracker.TimeTracker;
-import com.nastel.jkool.tnt4j.tracker.TrackingEvent;
+import com.jkoolcloud.tnt4j.TrackingLogger;
+import com.jkoolcloud.tnt4j.core.OpLevel;
+import com.jkoolcloud.tnt4j.core.OpType;
+import com.jkoolcloud.tnt4j.core.PropertySnapshot;
+import com.jkoolcloud.tnt4j.dump.SimpleDumpListener;
+import com.jkoolcloud.tnt4j.dump.TimeTrackerDumpProvider;
+import com.jkoolcloud.tnt4j.logger.AppenderConstants;
+import com.jkoolcloud.tnt4j.source.Source;
+import com.jkoolcloud.tnt4j.source.SourceFactory;
+import com.jkoolcloud.tnt4j.source.SourceType;
+import com.jkoolcloud.tnt4j.tracker.TimeTracker;
+import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 
 /**
  * This class implements syslog event handler that outputs syslog
