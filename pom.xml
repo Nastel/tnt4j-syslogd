@@ -7,28 +7,28 @@
     <version>0.2.5</version>
     <packaging>jar</packaging>
 
-    <name>syslogd</name>
-    <url>http://www.jkoolcloud.com/</url>
-    <description>Data Streaming, Data Analytics</description>
-    <licenses>
-        <license>
-            <name>The Apache License, Version 2.0</name>
-            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
-        </license>
-    </licenses>
-    <developers>
-        <developer>
-            <name>Albert Mavashev</name>
-            <email>amavashev@jkoolcloud.com</email>
-            <organization>jKool</organization>
-            <organizationUrl>http://www.jkoolcloud.com</organizationUrl>
-        </developer>
-    </developers>
-    <scm>
-        <connection>scm:git:git://github.com/Nastel/tnt4j-syslogd</connection>
-        <developerConnection>scm:git:git//github.com/Nastel/tnt4j-syslogd</developerConnection>
-        <url>https://github.com/Nastel/tnt4j-syslogd</url>
-    </scm>
+  <name>syslogd</name>
+  <url>http://www.jkoolcloud.com/</url>
+  <description>Data Streaming, Data Analytics</description>
+  <licenses>
+  <license>
+    <name>GNU Lesser General Public License, version 2.1</name>
+    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</url>
+  </license>
+  </licenses>
+   <developers>
+    <developer>
+      <name>jKool Team</name>
+      <email>support@jkoolcloud.com</email>
+      <organization>jKool</organization>
+      <organizationUrl>http://www.jkoolcloud.com</organizationUrl>
+    </developer>
+  </developers>
+  <scm>
+    <connection>scm:git:git://github.com/Nastel/tnt4j-syslogd</connection>
+    <developerConnection>scm:git:git//github.com/Nastel/tnt4j-syslogd</developerConnection>
+    <url>https://github.com/Nastel/tnt4j-syslogd</url>
+  </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
