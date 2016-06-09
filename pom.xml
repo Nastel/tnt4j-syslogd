@@ -12,8 +12,8 @@
   <description>Data Streaming, Data Analytics</description>
   <licenses>
   <license>
-    <name>The Apache License, Version 2.0</name>
-    <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+    <name>GNU Lesser General Public License, version 2.1</name>
+    <url>http://www.gnu.org/licenses/old-licenses/lgpl-2.1.en.html</url>
   </license>
   </licenses>
    <developers>
