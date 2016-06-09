@@ -40,3 +40,5 @@ That should do it.
 
 # Integrations
 * jKoolCloud (https://www.jkoolcloud.com)
+
+Please use JCenter or Maven and dependencies will be downloaded automatically. 
