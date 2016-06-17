@@ -32,6 +32,7 @@
 
   <properties>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    <release.deploy.dir>../build/${project.name}</release.deploy.dir>
   </properties>
    <distributionManagement>
 	 <repository>
@@ -123,6 +124,19 @@
             </execution>
         </executions>
     </plugin>     
+    <plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-clean-plugin</artifactId>
+        <version>3.0.0</version>
+        <inherited>false</inherited>
+        <configuration>
+            <filesets>
+                <fileset>
+                    <directory>${release.deploy.dir}</directory>
+                </fileset>
+            </filesets>
+        </configuration>
+     </plugin>  
     </plugins>
   </build>  
 </project>
