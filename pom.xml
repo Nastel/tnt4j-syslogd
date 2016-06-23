@@ -9,7 +9,7 @@
 
   <name>syslogd</name>
   <url>http://www.jkoolcloud.com/</url>
-  <description>Data Streaming, Data Analytics</description>
+  <description>Syslog Streaming Daemon over TNT4J</description>
   <licenses>
   <license>
     <name>GNU Lesser General Public License, version 2.1</name>
