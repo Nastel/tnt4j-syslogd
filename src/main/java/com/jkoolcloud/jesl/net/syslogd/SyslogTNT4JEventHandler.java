@@ -28,11 +28,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
-import org.productivity.java.syslog4j.server.SyslogServerEventIF;
-import org.productivity.java.syslog4j.server.SyslogServerIF;
-import org.productivity.java.syslog4j.server.SyslogServerSessionEventHandlerIF;
-import org.productivity.java.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
+import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
+import org.graylog2.syslog4j.server.SyslogServerEventIF;
+import org.graylog2.syslog4j.server.SyslogServerIF;
+import org.graylog2.syslog4j.server.SyslogServerSessionEventHandlerIF;
+import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 
 import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.core.OpLevel;

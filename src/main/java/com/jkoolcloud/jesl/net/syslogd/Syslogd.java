@@ -19,12 +19,12 @@
 package com.jkoolcloud.jesl.net.syslogd;
 
 
-import org.productivity.java.syslog4j.server.SyslogServer;
-import org.productivity.java.syslog4j.server.SyslogServerConfigIF;
-import org.productivity.java.syslog4j.server.SyslogServerEventHandlerIF;
-import org.productivity.java.syslog4j.server.SyslogServerIF;
-import org.productivity.java.syslog4j.server.impl.net.tcp.TCPNetSyslogServerConfigIF;
-import org.productivity.java.syslog4j.util.SyslogUtility;
+import org.graylog2.syslog4j.server.SyslogServer;
+import org.graylog2.syslog4j.server.SyslogServerConfigIF;
+import org.graylog2.syslog4j.server.SyslogServerEventHandlerIF;
+import org.graylog2.syslog4j.server.SyslogServerIF;
+import org.graylog2.syslog4j.server.impl.net.tcp.TCPNetSyslogServerConfigIF;
+import org.graylog2.syslog4j.util.SyslogUtility;
 
 /**
  * This class implements Syslog Server that accepts syslog messages

@@ -20,7 +20,7 @@ package com.jkoolcloud.jesl.net.syslogd;
 
 import java.util.Map;
 
-import org.productivity.java.syslog4j.impl.message.pci.PCISyslogMessage;
+import org.graylog2.syslog4j.impl.message.pci.PCISyslogMessage;
 
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
 

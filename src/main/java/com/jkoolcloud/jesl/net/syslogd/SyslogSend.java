@@ -27,11 +27,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
 
-import org.productivity.java.syslog4j.Syslog;
-import org.productivity.java.syslog4j.SyslogConfigIF;
-import org.productivity.java.syslog4j.SyslogIF;
-import org.productivity.java.syslog4j.impl.message.processor.structured.StructuredSyslogMessageProcessor;
-import org.productivity.java.syslog4j.util.SyslogUtility;
+import org.graylog2.syslog4j.Syslog;
+import org.graylog2.syslog4j.SyslogConfigIF;
+import org.graylog2.syslog4j.SyslogIF;
+import org.graylog2.syslog4j.impl.message.processor.structured.StructuredSyslogMessageProcessor;
+import org.graylog2.syslog4j.util.SyslogUtility;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;

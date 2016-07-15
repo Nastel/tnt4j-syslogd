@@ -34,7 +34,7 @@ That should do it.
 # Project Dependencies
 * JDK 1.6+
 * TNT4J (https://github.com/Nastel/TNT4J)
-* Syslog4j (http://syslog4j.org/)
+* Gralog2 Syslog4j (https://github.com/Graylog2/syslog4j-graylog2)
 * Joda Time (http://www.joda.org/joda-time/)
 * GSON (https://github.com/google/gson)
 
