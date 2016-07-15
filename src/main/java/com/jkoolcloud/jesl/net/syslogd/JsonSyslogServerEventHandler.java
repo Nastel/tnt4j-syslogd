@@ -25,12 +25,12 @@ import java.util.Map;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.ISODateTimeFormat;
-import org.productivity.java.syslog4j.impl.message.structured.StructuredSyslogMessage;
-import org.productivity.java.syslog4j.server.SyslogServerEventIF;
-import org.productivity.java.syslog4j.server.SyslogServerIF;
-import org.productivity.java.syslog4j.server.impl.event.printstream.PrintStreamSyslogServerEventHandler;
-import org.productivity.java.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
-import org.productivity.java.syslog4j.util.SyslogUtility;
+import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
+import org.graylog2.syslog4j.server.SyslogServerEventIF;
+import org.graylog2.syslog4j.server.SyslogServerIF;
+import org.graylog2.syslog4j.server.impl.event.printstream.PrintStreamSyslogServerEventHandler;
+import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
+import org.graylog2.syslog4j.util.SyslogUtility;
 
 /**
  * This class implements simple syslog event handler that outputs
