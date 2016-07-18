@@ -3,11 +3,11 @@
   <modelVersion>4.0.0</modelVersion>
 
   <groupId>com.jkoolcloud.jesl.net</groupId>
-  <artifactId>syslogd</artifactId>
-  <version>0.2.5</version>
+  <artifactId>tnt4j-syslogd</artifactId>
+  <version>0.3.1-SNAPSHOT</version>
   <packaging>jar</packaging>
 
-  <name>syslogd</name>
+  <name>tnt4j-syslogd</name>
   <url>http://www.jkoolcloud.com/</url>
   <description>Syslog Streaming Daemon over TNT4J</description>
   <licenses>
