@@ -51,10 +51,42 @@ public interface SyslogConstants {
 	static final int FACILITY_LOCAL6 = 22;
 	static final int FACILITY_LOCAL7 = 23;
 
-	static final String[] FACILITY = { "kern", "user", "mail", "daemon", "auth", "syslog", "lpr", "news", "uucp",
-	        "cron", "authpriv", "ftp", "ntp", "logaudit", "logalert", "clock", "local0", "local1", "local2", "local3",
-	        "local4", "local5", "local6", "local7", "unknown" };
+	static final String[] FACILITY = { 
+			"kern", 
+			"user", 
+			"mail", 
+			"daemon", 
+			"auth", 
+			"syslog", 
+			"lpr", 
+			"news", 
+			"uucp",
+	        "cron", 
+	        "authpriv", 
+	        "ftp", 
+	        "ntp", 
+	        "logaudit", 
+	        "logalert", 
+	        "clock", 
+	        "local0", 
+	        "local1", 
+	        "local2", 
+	        "local3",
+	        "local4", 
+	        "local5", 
+	        "local6", 
+	        "local7", 
+	        "unknown" };
 
-	static final OpLevel[] LEVELS = { OpLevel.HALT, OpLevel.FATAL, OpLevel.CRITICAL, OpLevel.ERROR, OpLevel.WARNING,
-	        OpLevel.WARNING, OpLevel.INFO, OpLevel.DEBUG, OpLevel.NONE };
+	static final OpLevel[] LEVELS = { 
+			OpLevel.HALT, 		// emergency
+			OpLevel.FATAL, 		// alert
+			OpLevel.CRITICAL, 	// critical
+			OpLevel.ERROR, 		// error
+			OpLevel.WARNING, 	// warning
+	        OpLevel.NOTICE, 	// notice
+	        OpLevel.INFO, 		// info
+	        OpLevel.DEBUG, 		// debug
+	        OpLevel.NONE
+	        };
 }
