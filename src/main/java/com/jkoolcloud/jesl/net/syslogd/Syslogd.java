@@ -71,7 +71,7 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * <tr><td><b>Critical</b></td>			<td>CRITICAL</td></tr>
  * <tr><td><b>Error</b></td>			<td>ERROR</td></tr>
  * <tr><td><b>Warning</b></td>			<td>WARNING</td></tr>
- * <tr><td><b>Notice</b></td>			<td>WARNING</td></tr>
+ * <tr><td><b>Notice</b></td>			<td>NOTICE</td></tr>
  * <tr><td><b>Informational</b></td>	<td>INFO</td></tr>
  * <tr><td><b>Debugging</b></td>		<td>DEBUG</td></tr>
  * </tbody>
