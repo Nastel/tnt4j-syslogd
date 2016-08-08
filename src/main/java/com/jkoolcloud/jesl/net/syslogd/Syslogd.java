@@ -23,6 +23,7 @@ import org.graylog2.syslog4j.server.SyslogServer;
 import org.graylog2.syslog4j.server.SyslogServerConfigIF;
 import org.graylog2.syslog4j.server.SyslogServerEventHandlerIF;
 import org.graylog2.syslog4j.server.SyslogServerIF;
+import org.graylog2.syslog4j.server.impl.event.printstream.SystemOutSyslogServerEventHandler;
 import org.graylog2.syslog4j.server.impl.net.tcp.TCPNetSyslogServerConfigIF;
 import org.graylog2.syslog4j.util.SyslogUtility;
 
@@ -141,6 +142,11 @@ public class Syslogd {
 			syslogServerConfig.addEventHandler(eventHandler);
 		}
 
+		if (options.printSyslog) {
+            SyslogServerEventHandlerIF eventHandler = SystemOutSyslogServerEventHandler.create();
+            syslogServerConfig.addEventHandler(eventHandler);
+		}
+
 		if (!options.quiet) {
 			System.out.println();
 		}
@@ -169,6 +175,7 @@ public class Syslogd {
 		System.out.println("-p <port>    port to bind");
 		System.out.println("-t <timeout> socket timeout (in milliseconds)");
 		System.out.println("-s <source>  tnt4j source name (default: " + Syslogd.class.getName() + ")");
+		System.out.println("-print       print original syslog message");
 		System.out.println();
 		System.out.println("-q           do not write anything to standard out");
 		System.out.println();
@@ -189,6 +196,7 @@ public class Syslogd {
 			if ("-s".equals(arg)) { if (i == args.length) { options.usage = "Must specify source with -s"; return options; } match = true; options.source = args[i++]; }
 			
 			if ("-q".equals(arg)) { match = true; options.quiet = true; }
+			if ("-print".equals(arg)) { match = true; options.printSyslog = true; }
 			
 			if (!match) {
 				if (options.protocol != null) {
@@ -211,6 +219,7 @@ class ServerOptions {
 	public String source = null;
 	public String protocol = null;
 	public boolean quiet = false;
+	public boolean printSyslog = false;
 	
 	public String host = "0.0.0.0";
 	public String port = "514";
