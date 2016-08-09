@@ -38,7 +38,9 @@ import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServer
 import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
+import com.jkoolcloud.tnt4j.core.Property;
 import com.jkoolcloud.tnt4j.core.PropertySnapshot;
+import com.jkoolcloud.tnt4j.core.ValueTypes;
 import com.jkoolcloud.tnt4j.dump.SimpleDumpListener;
 import com.jkoolcloud.tnt4j.dump.TimeTrackerDumpProvider;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
@@ -138,8 +140,12 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 
 		TrackingEvent tevent = logger.newEvent(facility, event.getMessage());
 		tevent.getOperation().setSeverity(level);
+		tevent.getOperation().addProperty(new Property("facility", facility));
+		tevent.getOperation().addProperty(new Property("hostname", event.getHost()));
+		tevent.getOperation().addProperty(new Property("level", event.getLevel(), ValueTypes.VALUE_TYPE_ID));
 		if (arg2 instanceof InetSocketAddress) {
 			InetSocketAddress from = (InetSocketAddress) arg2;
+			tevent.getOperation().addProperty(new Property("hostaddr", from.getAddress().getHostAddress()));
 			tevent.setLocation(from.getAddress().getHostAddress());
 		} else {
 			tevent.setLocation(event.getHost());
@@ -201,7 +207,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	protected TrackingEvent processRFC5424(String facility, StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
 		// RFC 5424 
 		tevent.getOperation().setName(facility);
-		tevent.getOperation().setResource(sevent.getApplicationName());
+		tevent.getOperation().setResource(sevent.getApplicationName()); 
 		tevent.setTag(facility, sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
 		assignPid(sevent, tevent);			
 		
