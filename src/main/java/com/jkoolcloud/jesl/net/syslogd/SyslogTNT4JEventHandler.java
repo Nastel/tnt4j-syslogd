@@ -19,6 +19,7 @@
 package com.jkoolcloud.jesl.net.syslogd;
 
 import java.io.IOException;
+import java.net.InetSocketAddress;
 import java.net.SocketAddress;
 import java.util.Date;
 import java.util.HashMap;
@@ -37,7 +38,9 @@ import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServer
 import com.jkoolcloud.tnt4j.TrackingLogger;
 import com.jkoolcloud.tnt4j.core.OpLevel;
 import com.jkoolcloud.tnt4j.core.OpType;
+import com.jkoolcloud.tnt4j.core.Property;
 import com.jkoolcloud.tnt4j.core.PropertySnapshot;
+import com.jkoolcloud.tnt4j.core.ValueTypes;
 import com.jkoolcloud.tnt4j.dump.SimpleDumpListener;
 import com.jkoolcloud.tnt4j.dump.TimeTrackerDumpProvider;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
@@ -137,7 +140,16 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 
 		TrackingEvent tevent = logger.newEvent(facility, event.getMessage());
 		tevent.getOperation().setSeverity(level);
-		tevent.setLocation(event.getHost());
+		tevent.getOperation().addProperty(new Property("facility", facility));
+		tevent.getOperation().addProperty(new Property("hostname", event.getHost()));
+		tevent.getOperation().addProperty(new Property("level", event.getLevel(), ValueTypes.VALUE_TYPE_ID));
+		if (arg2 instanceof InetSocketAddress) {
+			InetSocketAddress from = (InetSocketAddress) arg2;
+			tevent.getOperation().addProperty(new Property("hostaddr", from.getAddress().getHostAddress()));
+			tevent.setLocation(from.getAddress().getHostAddress());
+		} else {
+			tevent.setLocation(event.getHost());
+		}
 		tevent.setCharset(config.getConfig().getCharSet());
 		
 		if (event instanceof StructuredSyslogServerEvent) {
@@ -168,11 +180,11 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		String serverName = map.get("server.name").toString();
 		Long pid = (Long) map.get("appl.pid");
 		
-		tevent.setTag(serverName, appName);
+		tevent.setTag(facility, serverName, appName);
 		tevent.getOperation().setPID(pid);
 		tevent.getOperation().setTID(pid);
 		tevent.getOperation().setResource(appName);
-		tevent.getOperation().setName(appName + "/" + facility);
+		tevent.getOperation().setName(facility);
 
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
@@ -194,9 +206,9 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	 */
 	protected TrackingEvent processRFC5424(String facility, StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
 		// RFC 5424 
-		tevent.getOperation().setResource(sevent.getApplicationName());
-		tevent.getOperation().setName(sevent.getApplicationName() + "/" + facility);
-		tevent.setTag(sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
+		tevent.getOperation().setName(facility);
+		tevent.getOperation().setResource(sevent.getApplicationName()); 
+		tevent.setTag(facility, sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
 		assignPid(sevent, tevent);			
 		
 		// set the appropriate source
