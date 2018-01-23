@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -45,20 +45,29 @@ public class PCILogMessage extends PCISyslogMessage implements AppenderConstants
 		char delimiter = getDelimiter();
 		String replaceDelimiter = getReplaceDelimiter();
 
-		buffer.append(replaceDelimiter(PARAM_RESOURCE_LABEL, getAffectedResource(), delimiter, replaceDelimiter)).append(":");
+		buffer.append(replaceDelimiter(PARAM_RESOURCE_LABEL, getAffectedResource(), delimiter, replaceDelimiter))
+				.append(":");
 		buffer.append(delimiter);
 		buffer.append("PCI[");
-		buffer.append(DATE).append("=\"").append(replaceDelimiter(DATE, getDate(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(DATE).append("=\"").append(replaceDelimiter(DATE, getDate(), delimiter, replaceDelimiter))
+				.append("\"");
 		buffer.append(delimiter);
-		buffer.append(TIME).append("=\"").append(replaceDelimiter(TIME, getTime(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(TIME).append("=\"").append(replaceDelimiter(TIME, getTime(), delimiter, replaceDelimiter))
+				.append("\"");
 		buffer.append(delimiter);
-		buffer.append(PARAM_OP_NAME_LABEL).append("=\"").append(replaceDelimiter(PARAM_OP_NAME_LABEL, getEventType(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(PARAM_OP_NAME_LABEL).append("=\"")
+				.append(replaceDelimiter(PARAM_OP_NAME_LABEL, getEventType(), delimiter, replaceDelimiter))
+				.append("\"");
 		buffer.append(delimiter);
-		buffer.append(PARAM_USER_LABEL).append("=\"").append(replaceDelimiter(PARAM_USER_LABEL, getUserId(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(PARAM_USER_LABEL).append("=\"")
+				.append(replaceDelimiter(PARAM_USER_LABEL, getUserId(), delimiter, replaceDelimiter)).append("\"");
 		buffer.append(delimiter);
-		buffer.append(PARAM_EXCEPTION_LABEL).append("=\"").append(replaceDelimiter(PARAM_EXCEPTION_LABEL, getStatus(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(PARAM_EXCEPTION_LABEL).append("=\"")
+				.append(replaceDelimiter(PARAM_EXCEPTION_LABEL, getStatus(), delimiter, replaceDelimiter)).append("\"");
 		buffer.append(delimiter);
-		buffer.append(PARAM_LOCATION_LABEL).append("=\"").append(replaceDelimiter(PARAM_LOCATION_LABEL, getOrigination(), delimiter, replaceDelimiter)).append("\"");
+		buffer.append(PARAM_LOCATION_LABEL).append("=\"")
+				.append(replaceDelimiter(PARAM_LOCATION_LABEL, getOrigination(), delimiter, replaceDelimiter))
+				.append("\"");
 		buffer.append("]");
 
 		return buffer.toString();

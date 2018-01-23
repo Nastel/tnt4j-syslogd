@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -18,7 +18,6 @@
 
 package com.jkoolcloud.jesl.net.syslogd;
 
-
 import org.graylog2.syslog4j.server.SyslogServer;
 import org.graylog2.syslog4j.server.SyslogServerConfigIF;
 import org.graylog2.syslog4j.server.SyslogServerEventHandlerIF;
@@ -28,10 +27,12 @@ import org.graylog2.syslog4j.server.impl.net.tcp.TCPNetSyslogServerConfigIF;
 import org.graylog2.syslog4j.util.SyslogUtility;
 
 /**
- * This class implements Syslog Server that accepts syslog messages
- * and routes them to system out and TNT4J streaming framework.
+ * This class implements Syslog Server that accepts syslog messages and routes them to system out and TNT4J streaming
+ * framework.
  * 
- * <p>Syslog messages are mapped to TNT4J event structure as follows:</p>
+ * <p>
+ * Syslog messages are mapped to TNT4J event structure as follows:
+ * </p>
  * <table>
  * <tr><th>Syslog Field</th><th>TNT4J Field</th></tr>
  * <tbody>
@@ -47,7 +48,10 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * </tbody>
  * </table>
  * 
- * <p>The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog message:</p>
+ * <p>
+ * The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog
+ * message:
+ * </p>
  * <table>
  * <tr><th>Tag name</th><th>TNT4J Field</th></tr>
  * <tbody>
@@ -62,7 +66,9 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * </tbody>
  * </table>
  * 
- * <p>Syslog severity level to TN4J OpLevel mapping</p>
+ * <p>
+ * Syslog severity level to TN4J OpLevel mapping
+ * </p>
  * <table>
  * <tr><th>Syslog Level</th><th>TNT4J Level</th></tr>
  * <tbody>
@@ -77,9 +83,10 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * </tbody>
  * </table>
  * <p>
- * Event elapsed time is computed based on time since last event from the same
- * source (source is host/application combo).
+ * Event elapsed time is computed based on time since last event from the same source (source is host/application
+ * combo).
  * </p>
+ * 
  * @version $Revision: 1$
  */
 public class Syslogd {
@@ -91,22 +98,22 @@ public class Syslogd {
 			options(options.usage);
 			return;
 		}
-		
+
 		if (!options.quiet) {
 			System.out.println("Syslogd starting: " + SyslogServer.getVersion());
 			System.out.println("Options: " + options);
 		}
-		
+
 		if (!SyslogServer.exists(options.protocol)) {
 			options("Protocol \"" + options.protocol + "\" not supported");
 			return;
 		}
-		
+
 		SyslogServerIF syslogServer = SyslogServer.getInstance(options.protocol);
-		
+
 		SyslogServerConfigIF syslogServerConfig = syslogServer.getConfig();
 		syslogServerConfig.setUseStructuredData(true);
-		
+
 		if (options.host != null) {
 			syslogServerConfig.setHost(options.host);
 			if (!options.quiet) {
@@ -131,20 +138,20 @@ public class Syslogd {
 				System.err.println("Timeout not supported for protocol \"" + options.protocol + "\" (ignored)");
 			}
 		}
-		
+
 		if (options.source != null) {
 			SyslogServerEventHandlerIF eventHandler = new SyslogTNT4JEventHandler(options.source);
 			syslogServerConfig.addEventHandler(eventHandler);
 		}
-		
+
 		if (!options.quiet) {
 			SyslogServerEventHandlerIF eventHandler = new JsonSyslogServerEventHandler(System.out);
 			syslogServerConfig.addEventHandler(eventHandler);
 		}
 
 		if (options.printSyslog) {
-            SyslogServerEventHandlerIF eventHandler = SystemOutSyslogServerEventHandler.create();
-            syslogServerConfig.addEventHandler(eventHandler);
+			SyslogServerEventHandlerIF eventHandler = SystemOutSyslogServerEventHandler.create();
+			syslogServerConfig.addEventHandler(eventHandler);
 		}
 
 		if (!options.quiet) {
@@ -155,18 +162,18 @@ public class Syslogd {
 		if (!options.quiet) {
 			System.out.println("Syslogd ready: " + SyslogServer.getVersion());
 		}
-		
-		while(true) {
+
+		while (true) {
 			SyslogUtility.sleep(1000);
 		}
 	}
-	
+
 	public static void options(String reason) {
 		if (reason != null) {
 			System.out.println("Notice: " + reason);
 			System.out.println();
 		}
-		
+
 		System.out.println("Syslogd Options:");
 		System.out.println();
 		System.out.println("[-h <host>] [-p <port>] [-s <source>] [-q] <protocol>");
@@ -181,38 +188,72 @@ public class Syslogd {
 		System.out.println();
 		System.out.println("protocol     syslog protocol implementation (tcp, udp, ...)");
 	}
-	
+
 	public static ServerOptions parseOptions(String[] args) {
 		ServerOptions options = new ServerOptions(Syslogd.class.getName());
-	
+
 		int i = 0;
-		while(i < args.length) {
+		while (i < args.length) {
 			String arg = args[i++];
 			boolean match = false;
-			
-			if ("-h".equals(arg)) { if (i == args.length) { options.usage = "Must specify host with -h"; return options; } match = true; options.host = args[i++]; }
-			if ("-p".equals(arg)) { if (i == args.length) { options.usage = "Must specify port with -p"; return options; } match = true; options.port = args[i++]; }
-			if ("-t".equals(arg)) { if (i == args.length) { options.usage = "Must specify value (in milliseconds)"; return options; } match = true; options.timeout = args[i++]; }
-			if ("-s".equals(arg)) { if (i == args.length) { options.usage = "Must specify source with -s"; return options; } match = true; options.source = args[i++]; }
-			
-			if ("-q".equals(arg)) { match = true; options.quiet = true; }
-			if ("-print".equals(arg)) { match = true; options.printSyslog = true; }
-			
+
+			if ("-h".equals(arg)) {
+				if (i == args.length) {
+					options.usage = "Must specify host with -h";
+					return options;
+				}
+				match = true;
+				options.host = args[i++];
+			}
+			if ("-p".equals(arg)) {
+				if (i == args.length) {
+					options.usage = "Must specify port with -p";
+					return options;
+				}
+				match = true;
+				options.port = args[i++];
+			}
+			if ("-t".equals(arg)) {
+				if (i == args.length) {
+					options.usage = "Must specify value (in milliseconds)";
+					return options;
+				}
+				match = true;
+				options.timeout = args[i++];
+			}
+			if ("-s".equals(arg)) {
+				if (i == args.length) {
+					options.usage = "Must specify source with -s";
+					return options;
+				}
+				match = true;
+				options.source = args[i++];
+			}
+
+			if ("-q".equals(arg)) {
+				match = true;
+				options.quiet = true;
+			}
+			if ("-print".equals(arg)) {
+				match = true;
+				options.printSyslog = true;
+			}
+
 			if (!match) {
 				if (options.protocol != null) {
 					options.usage = "Only one protocol definition allowed";
 					return options;
-				}		
+				}
 				options.protocol = arg;
 			}
 		}
-		
+
 		if (options.protocol == null) {
 			options.usage = "Must specify protocol";
 			return options;
-		}		
+		}
 		return options;
-	}	
+	}
 }
 
 class ServerOptions {
@@ -220,16 +261,17 @@ class ServerOptions {
 	public String protocol = null;
 	public boolean quiet = false;
 	public boolean printSyslog = false;
-	
+
 	public String host = "0.0.0.0";
 	public String port = "514";
 	public String timeout = null;
 	public String usage = null;
-	
+
 	public ServerOptions(String name) {
 		source = name;
 	}
-	
+
+	@Override
 	public String toString() {
 		return source + ", " + protocol + "://" + host + ":" + port;
 	}

@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -77,7 +77,8 @@ public class SyslogSend {
 		System.out.println("syslog message; will only send one message per call.");
 		System.out.println();
 		System.out.println("Sending PCI messages:");
-		System.out.println("Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
+		System.out.println(
+				"Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
 		System.out.println();
 		System.out.println("If the message argument is ommited, lines will be taken from the");
 		System.out.println("standard input.");
@@ -239,8 +240,9 @@ public class SyslogSend {
 		Map<String, String> pciMap = new HashMap<String, String>();
 		while (tk.hasMoreTokens()) {
 			String token = tk.nextToken();
-			if (token.startsWith("#pci"))
+			if (token.startsWith("#pci")) {
 				continue;
+			}
 			String[] pair = token.split("=");
 			pciMap.put(pair[0], pair[1]);
 		}
@@ -250,7 +252,8 @@ public class SyslogSend {
 				+ pcimsg.createMessage() + "\"");
 	}
 
-	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions) throws IOException, InterruptedException {
+	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions)
+			throws IOException, InterruptedException {
 		InputStream is = null;
 		int level = SyslogUtility.getLevel(sendOptions.level);
 		if (sendOptions.fileName != null) {
@@ -266,7 +269,8 @@ public class SyslogSend {
 			while (line != null && !line.isEmpty()) {
 				if (!line.startsWith("{")) {
 					if (!sendOptions.quiet) {
-						System.out.println("Sending: " + sendOptions.facility + "." + sendOptions.level + " \"" + line + "\" ");
+						System.out.println(
+								"Sending: " + sendOptions.facility + "." + sendOptions.level + " \"" + line + "\" ");
 					}
 					syslog.log(level, line);
 				} else {

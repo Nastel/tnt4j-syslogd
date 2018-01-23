@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -36,11 +36,7 @@ import org.graylog2.syslog4j.server.SyslogServerSessionEventHandlerIF;
 import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 
 import com.jkoolcloud.tnt4j.TrackingLogger;
-import com.jkoolcloud.tnt4j.core.OpLevel;
-import com.jkoolcloud.tnt4j.core.OpType;
-import com.jkoolcloud.tnt4j.core.Property;
-import com.jkoolcloud.tnt4j.core.PropertySnapshot;
-import com.jkoolcloud.tnt4j.core.ValueTypes;
+import com.jkoolcloud.tnt4j.core.*;
 import com.jkoolcloud.tnt4j.dump.SimpleDumpListener;
 import com.jkoolcloud.tnt4j.dump.TimeTrackerDumpProvider;
 import com.jkoolcloud.tnt4j.logger.AppenderConstants;
@@ -51,9 +47,10 @@ import com.jkoolcloud.tnt4j.tracker.TimeTracker;
 import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
 
 /**
- * This class implements syslog event handler that outputs syslog
- * messages to TNT4J logging framework. 
- * <p>Syslog messages are mapped to TNT4J event structure as follows:</p>
+ * This class implements syslog event handler that outputs syslog messages to TNT4J logging framework.
+ * <p>
+ * Syslog messages are mapped to TNT4J event structure as follows:
+ * </p>
  * <table>
  * <tr><td><b>timestamp</b></td>		<td>stop/time</td></tr>
  * <tr><td><b>level</b></td>			<td>severity</td></tr>
@@ -66,10 +63,13 @@ import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
  * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
  * </table>
  * 
- * Event elapsed time is computed based on time since last event from the same
- * source (source is host/application combo).
+ * Event elapsed time is computed based on time since last event from the same source (source is host/application
+ * combo).
  * 
- * <p>The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog message:</p>
+ * <p>
+ * The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog
+ * message:
+ * </p>
  * <table>
  * <tr><td><b>usr</b></td>				<td>User name</td></tr>
  * <tr><td><b>cid</b></td>				<td>Correlator for relating events across threads, applications, servers</td></tr>
@@ -85,58 +85,57 @@ import com.jkoolcloud.tnt4j.tracker.TrackingEvent;
  * @version $Revision: 1$
  */
 public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerIF, SyslogConstants {
-    private static final long serialVersionUID = -3115399425996955812L;
+	private static final long serialVersionUID = -3115399425996955812L;
 
-    protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
-    protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
-    
+	protected static String SNAPSHOT_CAT_SYSLOG_MAP = "SyslogMap";
+	protected static String SNAPSHOT_CAT_SYSLOG_VARS = "SyslogVars";
 
-    /*
-     * Timing map maintains the number of nanoseconds since last event for a specific server/application
-     * combo.
-     */
- 	private static final TimeTracker timeTracker;
+	/*
+	 * Timing map maintains the number of nanoseconds since last event for a specific server/application combo.
+	 */
+	private static final TimeTracker timeTracker;
 
- 	static {
+	static {
 		// add a custom dump provider
 		timeTracker = TimeTracker.newTracker(10000, TimeUnit.DAYS.toMillis(30));
-		TrackingLogger.addDumpProvider(new TimeTrackerDumpProvider(SyslogTNT4JEventHandler.class.getName(), timeTracker));		
+		TrackingLogger
+				.addDumpProvider(new TimeTrackerDumpProvider(SyslogTNT4JEventHandler.class.getName(), timeTracker));
 		TrackingLogger.addDumpListener(new SimpleDumpListener(System.out));
 	}
-	
-    /*
-     * Tracking logger instance where all syslog messages are recorded.
-     */
-    private TrackingLogger logger;
-    
-    /*
-     * Regular expression pattern to detect name=value pairs.
-     */
+
+	/*
+	 * Tracking logger instance where all syslog messages are recorded.
+	 */
+	private TrackingLogger logger;
+
+	/*
+	 * Regular expression pattern to detect name=value pairs.
+	 */
 	private Pattern pattern = Pattern.compile("(\\w+)=\"*((?<=\")[^\"]+(?=\")|([^\\s]+))\"*");
-	
+
 	public SyslogTNT4JEventHandler(String source) {
 		logger = TrackingLogger.getInstance(source);
 	}
-	
-	@Override
-    public void destroy(SyslogServerIF arg0) {
-		logger.close();
-    }
 
 	@Override
-    public void initialize(SyslogServerIF arg0) {
-		try {
-	        logger.open();
-        } catch (IOException e) {
-        	throw new RuntimeException(e);
-        }
+	public void destroy(SyslogServerIF arg0) {
+		logger.close();
 	}
 
 	@Override
-    public void event(Object arg0, SyslogServerIF config, SocketAddress arg2, SyslogServerEventIF event) {
+	public void initialize(SyslogServerIF arg0) {
+		try {
+			logger.open();
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	@Override
+	public void event(Object arg0, SyslogServerIF config, SocketAddress arg2, SyslogServerEventIF event) {
 		Date date = (event.getDate() == null ? new Date() : event.getDate());
 		String facility = getFacilityString(event.getFacility());
-		OpLevel level = getOpLevel(event.getLevel());	
+		OpLevel level = getOpLevel(event.getLevel());
 
 		TrackingEvent tevent = logger.newEvent(facility, event.getMessage());
 		tevent.getOperation().setSeverity(level);
@@ -151,26 +150,29 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 			tevent.setLocation(event.getHost());
 		}
 		tevent.setCharset(config.getConfig().getCharSet());
-		
+
 		if (event instanceof StructuredSyslogServerEvent) {
-			processRFC5424(facility, (StructuredSyslogServerEvent)event, tevent);
+			processRFC5424(facility, (StructuredSyslogServerEvent) event, tevent);
 		} else {
 			processRFC3164(facility, event, tevent);
 		}
-		
+
 		// extract name=value pairs if available
 		extractVariables(event, tevent);
 		String locationKey = tevent.getLocation() + "/" + tevent.getOperation().getResource();
-		tevent.stop(date.getTime()*1000, getUsecSinceLastEvent(locationKey));
+		tevent.stop(date.getTime() * 1000, getUsecSinceLastEvent(locationKey));
 		logger.tnt(tevent);
 	}
 
 	/**
 	 * Process syslog message based on RFC5424
 	 *
-	 * @param facility syslog facility name
-	 * @param event syslog message
-	 * @param tevent tracking event
+	 * @param facility
+	 *            syslog facility name
+	 * @param event
+	 *            syslog message
+	 * @param tevent
+	 *            tracking event
 	 * 
 	 * @return tracking event
 	 */
@@ -179,7 +181,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		String appName = map.get("appl.name").toString();
 		String serverName = map.get("server.name").toString();
 		Long pid = (Long) map.get("appl.pid");
-		
+
 		tevent.setTag(facility, serverName, appName);
 		tevent.getOperation().setPID(pid);
 		tevent.getOperation().setTID(pid);
@@ -189,50 +191,54 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
 		Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER);
-		tevent.setSource(factory.newSource(appName, 
-				SourceType.APPL, 
-				factory.newSource(serverName, SourceType.SERVER, rootSource)));						
+		tevent.setSource(factory.newSource(appName, SourceType.APPL,
+				factory.newSource(serverName, SourceType.SERVER, rootSource)));
 		return tevent;
 	}
-	
+
 	/**
 	 * Process syslog message based on RFC5424
 	 *
-	 * @param facility syslog facility name
-	 * @param sevent syslog structured message
-	 * @param tevent tracking event
+	 * @param facility
+	 *            syslog facility name
+	 * @param sevent
+	 *            syslog structured message
+	 * @param tevent
+	 *            tracking event
 	 * 
 	 * @return tracking event
 	 */
 	protected TrackingEvent processRFC5424(String facility, StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
-		// RFC 5424 
+		// RFC 5424
 		tevent.getOperation().setName(facility);
-		tevent.getOperation().setResource(sevent.getApplicationName()); 
-		tevent.setTag(facility, sevent.getHost(), sevent.getApplicationName(), sevent.getStructuredMessage().getMessageId());
-		assignPid(sevent, tevent);			
-		
+		tevent.getOperation().setResource(sevent.getApplicationName());
+		tevent.setTag(facility, sevent.getHost(), sevent.getApplicationName(),
+				sevent.getStructuredMessage().getMessageId());
+		assignPid(sevent, tevent);
+
 		// set the appropriate source
 		SourceFactory factory = logger.getConfiguration().getSourceFactory();
 		Source rootSource = factory.getRootSource().getSource(SourceType.DATACENTER);
-		tevent.setSource(factory.newSource(sevent.getApplicationName(), 
-				SourceType.APPL, 
+		tevent.setSource(factory.newSource(sevent.getApplicationName(), SourceType.APPL,
 				factory.newSource(sevent.getHost(), SourceType.SERVER, rootSource)));
-		
+
 		// process structured event attributes into snapshot
-		extractStructuredData(sevent, tevent);	
+		extractStructuredData(sevent, tevent);
 		return tevent;
 	}
-	
+
 	/**
 	 * Process a given map of key/value pairs into a TNT4J event object {@link TrackingEvent}.
 	 *
-	 * @param attrs a set of name/value pairs
-	 * @param tevent tracking event
+	 * @param attrs
+	 *            a set of name/value pairs
+	 * @param tevent
+	 *            tracking event
 	 *
 	 * @return tnt4j tracking event object
 	 */
 	private TrackingEvent extractSpecialKeys(Map<String, Object> attrs, TrackingEvent tevent) {
-		for (Map.Entry<String, Object> entry: attrs.entrySet()) {
+		for (Map.Entry<String, Object> entry : attrs.entrySet()) {
 			String key = entry.getKey();
 			String value = entry.getValue().toString();
 			if (key.equals(AppenderConstants.PARAM_CORRELATOR_LABEL)) {
@@ -251,7 +257,7 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 				tevent.getOperation().setName(value);
 			} else if (key.equals(AppenderConstants.PARAM_EXCEPTION_LABEL)) {
 				tevent.getOperation().setException(value);
-			} 
+			}
 		}
 		return tevent;
 	}
@@ -259,58 +265,68 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	/**
 	 * Extract syslog name/value pairs if available in within the message
 	 *
-	 * @param event syslog event message
-	 * @param tevent tracking event
+	 * @param event
+	 *            syslog event message
+	 * @param tevent
+	 *            tracking event
 	 * @return map of parsed out event attributes (name=value pairs)
 	 */
 	protected Map<String, Object> extractVariables(SyslogServerEventIF event, TrackingEvent tevent) {
 		Map<String, Object> attr = parseVariables(event.getMessage());
 		if (attr != null && attr.size() > 0) {
 			extractSpecialKeys(attr, tevent);
-			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(), tevent.getSeverity());
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_VARS, tevent.getOperation().getResource(),
+					tevent.getSeverity());
 			snap.addAll(attr);
-			tevent.getOperation().addSnapshot(snap);			
-		}	
+			tevent.getOperation().addSnapshot(snap);
+		}
 		return attr;
 	}
-	
+
 	/**
 	 * Extract syslog structured data if available (part of RFC 5424)
 	 *
-	 * @param sevent syslog structured message
-	 * @param tevent tracking event
+	 * @param sevent
+	 *            syslog structured message
+	 * @param tevent
+	 *            tracking event
 	 */
 	protected void extractStructuredData(StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
 		StructuredSyslogMessage sm = sevent.getStructuredMessage();
 		Map<?, ?> map = sm.getStructuredData();
 		if (map != null && !map.isEmpty()) {
-			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(), tevent.getSeverity());
+			PropertySnapshot snap = new PropertySnapshot(SNAPSHOT_CAT_SYSLOG_MAP, sevent.getApplicationName(),
+					tevent.getSeverity());
 			snap.addAll(map);
 			tevent.getOperation().addSnapshot(snap);
-		}		
+		}
 	}
-	
+
 	/**
 	 * Extract and assign process id
 	 *
-	 * @param sevent syslog structured message
-	 * @param tevent tracking event
+	 * @param sevent
+	 *            syslog structured message
+	 * @param tevent
+	 *            tracking event
 	 */
 	protected void assignPid(StructuredSyslogServerEvent sevent, TrackingEvent tevent) {
 		tevent.getOperation().setPID(0);
 		String pid = sevent.getProcessId();
 		if (pid != null && !pid.isEmpty()) {
 			try {
-				tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));	
-			} catch (NumberFormatException e) {}
+				tevent.getOperation().setPID(Long.parseLong(sevent.getProcessId()));
+			} catch (NumberFormatException e) {
+			}
 		}
-		tevent.getOperation().setTID(tevent.getOperation().getPID());		
+		tevent.getOperation().setTID(tevent.getOperation().getPID());
 	}
-	
+
 	/**
 	 * Parse syslog name=value variables
 	 *
-	 * @param message syslog message
+	 * @param message
+	 *            syslog message
 	 * @return syslog name=value variables
 	 */
 	protected Map<String, Object> parseVariables(String message) {
@@ -330,9 +346,12 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	/**
 	 * Test key value pair for numeric, convert and store in map
 	 *
-	 * @param map collection of name, value pairs
-	 * @param key associated with key, value pair
-	 * @param value associated with key, value pair
+	 * @param map
+	 *            collection of name, value pairs
+	 * @param key
+	 *            associated with key, value pair
+	 * @param value
+	 *            associated with key, value pair
 	 * 
 	 */
 	private void mapToTyped(Map<String, Object> map, String key, String value) {
@@ -350,18 +369,18 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		}
 		map.put(key, value);
 	}
-	
+
 	/**
-	 * Parse syslog header attributes into a map.
-	 * Message structure: <server> <appl-part>:<message>
+	 * Parse syslog header attributes into a map. Message structure: <server> <appl-part>:<message>
 	 *
-	 * @param event syslog event
+	 * @param event
+	 *            syslog event
 	 * @return syslog attributes such as host, application, pid
 	 */
 	private Map<String, Object> parseAttributes(SyslogServerEventIF event) {
 		HashMap<String, Object> map = new HashMap<String, Object>();
 		String message = event.getMessage();
-		
+
 		if (message.indexOf(":") > 0) {
 			String[] tokens = message.split(":| ");
 			map.put("server.name", tokens[0]);
@@ -385,31 +404,34 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 		}
 		return map;
 	}
-	
+
 	/**
 	 * Obtain string representation of syslog facility
 	 *
-	 * @param facility syslog facility
+	 * @param facility
+	 *            syslog facility
 	 * @return string representation of syslog facility
 	 */
 	public static String getFacilityString(int facility) {
-	    return ((facility >= 0) && (facility < FACILITY.length))? FACILITY[facility]: FACILITY[FACILITY.length-1];
-    }
+		return ((facility >= 0) && (facility < FACILITY.length)) ? FACILITY[facility] : FACILITY[FACILITY.length - 1];
+	}
 
 	/**
 	 * Obtain syslog level to {@link OpLevel} mapping
 	 *
-	 * @param level syslog level
+	 * @param level
+	 *            syslog level
 	 * @return {@link OpLevel} mapping
 	 */
 	public static OpLevel getOpLevel(int level) {
-	    return ((level >= 0) && (level < LEVELS.length))? LEVELS[level]: LEVELS[LEVELS.length-1];
-    }
+		return ((level >= 0) && (level < LEVELS.length)) ? LEVELS[level] : LEVELS[LEVELS.length - 1];
+	}
 
 	/**
 	 * Obtain elapsed microseconds since last event
 	 * 
-	 * @param key timer key
+	 * @param key
+	 *            timer key
 	 * @return elapsed microseconds since last event
 	 */
 	protected long getUsecSinceLastEvent(String key) {
@@ -417,21 +439,23 @@ public class SyslogTNT4JEventHandler implements SyslogServerSessionEventHandlerI
 	}
 
 	@Override
-    public void exception(Object arg0, SyslogServerIF arg1, SocketAddress arg2, Exception arg3) {
-		logger.log(OpLevel.ERROR, "Syslog exception: obj={0}, syslog.server.if={1}, socket={2}", arg0, arg1, arg2, arg3);
+	public void exception(Object arg0, SyslogServerIF arg1, SocketAddress arg2, Exception arg3) {
+		logger.log(OpLevel.ERROR, "Syslog exception: obj={0}, syslog.server.if={1}, socket={2}", arg0, arg1, arg2,
+				arg3);
 		if (arg3 != null) {
 			arg3.printStackTrace();
 		}
 	}
 
 	@Override
-    public void sessionClosed(Object arg0, SyslogServerIF arg1, SocketAddress arg2, boolean arg3) {
-		logger.log(OpLevel.DEBUG, "Session closed: obj={0}, syslog.server.if={1}, socket={2}, timeout={3}", arg0, arg1, arg2, arg3);
-    }
+	public void sessionClosed(Object arg0, SyslogServerIF arg1, SocketAddress arg2, boolean arg3) {
+		logger.log(OpLevel.DEBUG, "Session closed: obj={0}, syslog.server.if={1}, socket={2}, timeout={3}", arg0, arg1,
+				arg2, arg3);
+	}
 
 	@Override
-    public Object sessionOpened(SyslogServerIF arg0, SocketAddress arg1) {
+	public Object sessionOpened(SyslogServerIF arg0, SocketAddress arg1) {
 		logger.log(OpLevel.DEBUG, "Session opened: syslog.server.if={0}, socket={1}", arg0, arg1);
 		return null;
-    }
+	}
 }
