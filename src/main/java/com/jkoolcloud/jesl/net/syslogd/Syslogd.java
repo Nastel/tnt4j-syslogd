@@ -33,7 +33,7 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * <p>
  * Syslog messages are mapped to TNT4J event structure as follows:
  * </p>
- * <table>
+ * <table summary="">
  * <tr><th>Syslog Field</th><th>TNT4J Field</th></tr>
  * <tbody>
  * <tr><td><b>timestamp</b></td>		<td>stop/time</td></tr>
@@ -41,7 +41,7 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * <tr><td><b>applname/facility</b></td><td>event/operation name</td></tr>
  * <tr><td><b>host</b></td>				<td>location</td></tr>
  * <tr><td><b>applname</b></td>			<td>resource name</td></tr>
- * <tr><td><b>pid</b></td>				<td>process ID & thread ID</td></tr>
+ * <tr><td><b>pid</b></td>				<td>process ID and thread ID</td></tr>
  * <tr><td><b>message</b></td>			<td>message</td></tr>
  * <tr><td><b>RFC5424 map</b></td>		<td>SyslogMap snapshot</td></tr>
  * <tr><td><b>name=value pairs</b></td>	<td>SyslogVars snapshot</td></tr>
@@ -52,7 +52,7 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * The following (name=value) pairs have special meaning and mapped to TNT4J tracking events when included in syslog
  * message:
  * </p>
- * <table>
+ * <table summary="">
  * <tr><th>Tag name</th><th>TNT4J Field</th></tr>
  * <tbody>
  * <tr><td><b>usr</b></td><td>User name</td></tr>
@@ -69,7 +69,7 @@ import org.graylog2.syslog4j.util.SyslogUtility;
  * <p>
  * Syslog severity level to TN4J OpLevel mapping
  * </p>
- * <table>
+ * <table summary="">
  * <tr><th>Syslog Level</th><th>TNT4J Level</th></tr>
  * <tbody>
  * <tr><td><b>Emergency</b></td>		<td>HALT</td></tr>
