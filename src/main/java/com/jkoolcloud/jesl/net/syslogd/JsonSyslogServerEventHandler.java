@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -23,43 +23,42 @@ import java.util.Date;
 import java.util.Map;
 
 import org.apache.commons.lang3.StringEscapeUtils;
-import org.joda.time.format.DateTimeFormatter;
-import org.joda.time.format.ISODateTimeFormat;
 import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.graylog2.syslog4j.server.SyslogServerEventIF;
 import org.graylog2.syslog4j.server.SyslogServerIF;
 import org.graylog2.syslog4j.server.impl.event.printstream.PrintStreamSyslogServerEventHandler;
 import org.graylog2.syslog4j.server.impl.event.structured.StructuredSyslogServerEvent;
 import org.graylog2.syslog4j.util.SyslogUtility;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.ISODateTimeFormat;
 
 /**
- * This class implements simple syslog event handler that outputs
- * formatted syslog messages to a print stream in JSON format.
- * The output contains offset.usec which is time since last event in microseconds.
- * This field can be used to play back events in exact same time sequence. 
- * Event timestamp is formatted in ISO8601 format with UTC timezone.
+ * This class implements simple syslog event handler that outputs formatted syslog messages to a print stream in JSON
+ * format. The output contains offset.usec which is time since last event in microseconds. This field can be used to
+ * play back events in exact same time sequence. Event timestamp is formatted in ISO8601 format with UTC timezone.
  *
  * @version $Revision $
  */
 class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
-    private static final long serialVersionUID = 8964244723777923472L;
+	private static final long serialVersionUID = 8964244723777923472L;
 
-    private long lastEvent = 0;
+	private long lastEvent = 0;
 	DateTimeFormatter fmt = ISODateTimeFormat.dateTime().withZoneUTC();
-    
+
 	public JsonSyslogServerEventHandler(PrintStream out) {
 		super(out);
 	}
-	
+
 	@Override
-	public void event(Object session, SyslogServerIF syslogServer, SocketAddress socketAddress, SyslogServerEventIF event) {
+	public void event(Object session, SyslogServerIF syslogServer, SocketAddress socketAddress,
+			SyslogServerEventIF event) {
 		long now = System.nanoTime();
-		long offset = lastEvent == 0? 0: (System.nanoTime() - lastEvent)/1000;
+		long offset = lastEvent == 0 ? 0 : (System.nanoTime() - lastEvent) / 1000;
 		lastEvent = now;
-		
+
 		Date date = (event.getDate() == null ? new Date() : event.getDate());
 		String timestamp = fmt.print(date.getTime());
-		
+
 		String facility = SyslogTNT4JEventHandler.getFacilityString(event.getFacility());
 		String level = SyslogUtility.getLevelString(event.getLevel());
 		String host = event.getHost();
@@ -87,5 +86,5 @@ class JsonSyslogServerEventHandler extends PrintStreamSyslogServerEventHandler {
 					+ ", \"msg\":\"" + StringEscapeUtils.escapeJson(event.getMessage()) 
 					+ "\"}");
 		}
-	}	
+	}
 }

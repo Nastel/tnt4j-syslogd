@@ -1,5 +1,5 @@
 /*    
- *    Copyright (C) 2015, JKOOL LLC.
+ *    Copyright (C) 2015-2018, JKOOL LLC.
  *
  *    This library is free software; you can redistribute it and/or
  *    modify it under the terms of the GNU Lesser General Public
@@ -18,11 +18,7 @@
 
 package com.jkoolcloud.jesl.net.syslogd;
 
-import java.io.BufferedReader;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.StringTokenizer;
@@ -38,8 +34,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 
 /**
- * This class implements Syslog Client that sends syslog messages
- * from command line, standard input or an input file.
+ * This class implements Syslog Client that sends syslog messages from command line, standard input or an input file.
  *
  * @version $Revision: 1$
  */
@@ -82,7 +77,8 @@ public class SyslogSend {
 		System.out.println("syslog message; will only send one message per call.");
 		System.out.println();
 		System.out.println("Sending PCI messages:");
-		System.out.println("Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
+		System.out.println(
+				"Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
 		System.out.println();
 		System.out.println("If the message argument is ommited, lines will be taken from the");
 		System.out.println("standard input.");
@@ -223,7 +219,7 @@ public class SyslogSend {
 		if (sendOptions.message != null) {
 			if (!sendOptions.quiet) {
 				System.out.println("Sending " + sendOptions.facility + "." + sendOptions.level + " message \""
-				        + sendOptions.message + "\"");
+						+ sendOptions.message + "\"");
 			}
 			if (!sendOptions.message.startsWith("#pci(")) {
 				syslog.log(level, sendOptions.message);
@@ -240,21 +236,24 @@ public class SyslogSend {
 	}
 
 	private static void sendPCIEvent(SyslogIF syslog, SendOptions sendOptions) {
-		StringTokenizer tk = new StringTokenizer(sendOptions.message, "(),"); 
+		StringTokenizer tk = new StringTokenizer(sendOptions.message, "(),");
 		Map<String, String> pciMap = new HashMap<String, String>();
 		while (tk.hasMoreTokens()) {
 			String token = tk.nextToken();
-			if (token.startsWith("#pci")) continue;
-			String [] pair = token.split("=");
+			if (token.startsWith("#pci")) {
+				continue;
+			}
+			String[] pair = token.split("=");
 			pciMap.put(pair[0], pair[1]);
 		}
 		PCILogMessage pcimsg = new PCILogMessage(pciMap);
 		syslog.log(sendOptions.sysLevel, pcimsg);
 		System.out.println("Sent " + sendOptions.facility + "." + sendOptions.level + " message \""
-		        + pcimsg.createMessage() + "\"");
+				+ pcimsg.createMessage() + "\"");
 	}
 
-	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions) throws IOException, InterruptedException {
+	private static void sendFromTextFile(SyslogIF syslog, SendOptions sendOptions)
+			throws IOException, InterruptedException {
 		InputStream is = null;
 		int level = SyslogUtility.getLevel(sendOptions.level);
 		if (sendOptions.fileName != null) {
@@ -267,10 +266,11 @@ public class SyslogSend {
 		BufferedReader br = new BufferedReader(new InputStreamReader(is));
 		try {
 			String line = br.readLine();
-			while (line != null && line.length() > 0) {
+			while (line != null && !line.isEmpty()) {
 				if (!line.startsWith("{")) {
 					if (!sendOptions.quiet) {
-						System.out.println("Sending: " + sendOptions.facility + "." + sendOptions.level + " \"" + line + "\" ");
+						System.out.println(
+								"Sending: " + sendOptions.facility + "." + sendOptions.level + " \"" + line + "\" ");
 					}
 					syslog.log(level, line);
 				} else {
@@ -303,11 +303,11 @@ public class SyslogSend {
 		if (!sendOptions.quiet) {
 			if (!syslog.getConfig().isUseStructuredData()) {
 				System.out.println("Sending(" + offset_usec + ")(" + syslog.getConfig().isUseStructuredData() + "): "
-				        + facility + "." + level + " \"" + msg + "\"");
+						+ facility + "." + level + " \"" + msg + "\"");
 			} else {
 				System.out.println("Sending(" + offset_usec + ")(" + syslog.getConfig().isUseStructuredData() + "): "
-				        + facility + "." + level + "." + appl.getAsString() + "." + jobject.get("pid").getAsString()
-				        + " \"" + msg + "\"");
+						+ facility + "." + level + "." + appl.getAsString() + "." + jobject.get("pid").getAsString()
+						+ " \"" + msg + "\"");
 			}
 		}
 		Thread.sleep(offset_usec / 1000);
