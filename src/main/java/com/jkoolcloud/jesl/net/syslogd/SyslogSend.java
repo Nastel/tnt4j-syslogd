@@ -47,41 +47,31 @@ public class SyslogSend {
 			System.out.println();
 		}
 
-		System.out.println("Usage:");
-		System.out.println();
-		System.out.println("Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>]");
-		System.out.println("       <protocol>");
-		System.out.println();
-		System.out.println("Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>]");
-		System.out.println("       <protocol> [message...]");
-		System.out.println();
-		System.out.println("Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>]");
-		System.out.println("       -i <file> <protocol>");
-		System.out.println();
-		System.out.println("-h <host>      host or IP to send message (default: localhost)");
-		System.out.println("-p <port>      port to send message (default: 514)");
-		System.out.println("-l <level>     syslog level to use (default: INFO)");
-		System.out.println("-f <facility>  syslog facility to use (default: USER)");
-		System.out.println("-i <file>      input taken from the specified file");
-		System.out.println();
-		System.out.println("-q             do not write anything to standard out");
-		System.out.println();
-		System.out.println("protocol       Syslog protocol implementation");
-		System.out.println("message        syslog message text. PCI messages can be sent using this format:");
-		System.out.println("               #pci(userId=?,eventType=?,status=?,origination=?,affectedResource=?)");
-		System.out.println("               (? should be replaced by appropriate values):");
-		System.out.println();
-		System.out.println("Notes:");
-		System.out.println();
-		System.out.println("Additional message arguments will be concatenated into the same");
-		System.out.println("syslog message; will only send one message per call.");
-		System.out.println();
-		System.out.println("Sending PCI messages:");
-		System.out.println(
-				"Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"");
-		System.out.println();
-		System.out.println("If the message argument is ommited, lines will be taken from the");
-		System.out.println("standard input.");
+		String usageStr = "Usage:                                                         \n\n"
+				+ "Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>             \n"
+				+ "       <protocol>                                          \n\n"
+				+ "Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>]\n"
+				+ "       <protocol> [message...]                             \n\n"
+				+ "Syslog [-h <host>] [-p <port>] [-l <level>] [-f <facility>]\n"
+				+ "       -i <file> <protocol>                                \n\n"
+				+ "-h <host>      host or IP to send message (default: localhost)\n"
+				+ "-p <port>      port to send message (default: 514)\n"
+				+ "-l <level>     syslog level to use (default: INFO)\n"
+				+ "-f <facility>  syslog facility to use (default: USER)\n"
+				+ "-i <file>      input taken from the specified file\n\n"
+				+ "-q             do not write anything to standard out\n\n"
+				+ "protocol       Syslog protocol implementation\n"
+				+ "message        syslog message text. PCI messages can be sent using this format:\n"
+				+ "               #pci(userId=?,eventType=?,status=?,origination=?,affectedResource=?)\n"
+				+ "               (? should be replaced by appropriate values):\n\n"
+				+ "Notes:                                                      \n\n"
+				+ "Additional message arguments will be concatenated into the same\n"
+				+ "syslog message; will only send one message per call.\n\n"
+				+ "Sending PCI messages:                                          \n"
+				+ "Syslog -h host -p 5140 \"#pci(userId=john,eventType=audit,status=success,origination=CreditCards,affectedResource=Payment)\"\n\n"
+				+ "If the message argument is omitted, lines will be taken from the standard input.";
+
+		System.out.println(usageStr);
 	}
 
 	public static SendOptions parseOptions(String[] args) {

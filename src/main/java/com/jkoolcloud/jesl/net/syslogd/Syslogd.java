@@ -174,19 +174,17 @@ public class Syslogd {
 			System.out.println();
 		}
 
-		System.out.println("Syslogd Options:");
-		System.out.println();
-		System.out.println("[-h <host>] [-p <port>] [-s <source>] [-q] <protocol>");
-		System.out.println();
-		System.out.println("-h <host>    host or IP to bind");
-		System.out.println("-p <port>    port to bind");
-		System.out.println("-t <timeout> socket timeout (in milliseconds)");
-		System.out.println("-s <source>  tnt4j source name (default: " + Syslogd.class.getName() + ")");
-		System.out.println("-print       print original syslog message");
-		System.out.println();
-		System.out.println("-q           do not write anything to standard out");
-		System.out.println();
-		System.out.println("protocol     syslog protocol implementation (tcp, udp, ...)");
+		String usageStr = "Syslogd Options:                             \n\n"
+				+ "[-h <host>] [-p <port>] [-s <source>] [-q] <protocol>\n\n"
+				+ "-h <host>    host or IP to bind                      \n"
+				+ "-p <port>    port to bind                            \n"
+				+ "-t <timeout> socket timeout (in milliseconds)        \n"
+				+ "-s <source>  tnt4j source name (default: " + Syslogd.class.getName() + ")\n"
+				+ "-print       print original syslog message\n\n"
+				+ "-q           do not write anything to standard out\n\n"
+				+ "protocol     syslog protocol implementation (tcp, udp, ...)";
+
+		System.out.println(usageStr);
 	}
 
 	public static ServerOptions parseOptions(String[] args) {
