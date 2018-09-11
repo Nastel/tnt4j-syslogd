@@ -4,7 +4,7 @@
 
     <groupId>com.jkoolcloud.jesl.net</groupId>
     <artifactId>tnt4j-syslogd</artifactId>
-    <version>0.3</version>
+    <version>0.3.1</version>
     <packaging>jar</packaging>
 
     <name>tnt4j-syslogd</name>
