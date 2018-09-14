@@ -26,7 +26,7 @@ $ jksys -h localhost -p 5140 -l error -f user tcp "#pci(userId=john,eventType=au
 $ jksys -h localhost -p 5140 -f jksysd.json tcp
 ```
 where `jksysd.json` is JSON output of JESL syslog daemon.
-	
+
 That should do it.
 
 **NOTE:** Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
@@ -41,4 +41,4 @@ That should do it.
 # Integrations
 * jKoolCloud (https://www.jkoolcloud.com)
 
-Please use JCenter or Maven and dependencies will be downloaded automatically. 
+Please use JCenter or Maven and dependencies will be downloaded automatically.
