@@ -32,7 +32,7 @@ That should do it.
 **NOTE:** Currently supports (RFC 3164) and the Structured Syslog protocol (RFC 5424).
 
 # Project Dependencies
-* JDK 1.7+
+* JDK 1.8+
 * TNT4J (https://github.com/Nastel/TNT4J)
 * Gralog2 Syslog4j (https://github.com/Graylog2/syslog4j-graylog2)
 * Joda Time (http://www.joda.org/joda-time/)
