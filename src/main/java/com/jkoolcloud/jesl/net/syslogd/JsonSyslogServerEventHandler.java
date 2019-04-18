@@ -22,7 +22,7 @@ import java.net.SocketAddress;
 import java.util.Date;
 import java.util.Map;
 
-import org.apache.commons.lang3.StringEscapeUtils;
+import org.apache.commons.text.StringEscapeUtils;
 import org.graylog2.syslog4j.impl.message.structured.StructuredSyslogMessage;
 import org.graylog2.syslog4j.server.SyslogServerEventIF;
 import org.graylog2.syslog4j.server.SyslogServerIF;
