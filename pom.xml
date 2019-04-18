@@ -63,6 +63,7 @@
         <gson.version>2.8.5</gson.version>
         <tnt4j.version>2.10.0</tnt4j.version>
         <syslog4j.version>0.9.58</syslog4j.version>
+        <slf4j.version>1.7.26</slf4j.version>
     </properties>
 
     <dependencies>
@@ -82,20 +83,13 @@
             <artifactId>syslog4j</artifactId>
             <version>${syslog4j.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-simple</artifactId>
+            <version>${slf4j.version}</version>
+            <scope>runtime</scope>
+        </dependency>
     </dependencies>
-
-    <profiles>
-        <profile>
-            <id>doclint-java8-disable</id>
-            <activation>
-                <jdk>[1.8,)</jdk>
-            </activation>
-            <properties>
-                <javadoc.opts>-Xdoclint:none</javadoc.opts>
-                <javadoc.failOnError>false</javadoc.failOnError>
-            </properties>
-        </profile>
-    </profiles>
 
     <build>
         <defaultGoal>clean install</defaultGoal>
@@ -129,9 +123,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.0.1</version>
+                <version>3.1.0</version>
                 <configuration>
-                    <failOnError>${javadoc.failOnError}</failOnError>
+                    <failOnError>false</failOnError>
+                    <doclint>all</doclint>
                 </configuration>
                 <executions>
                     <execution>
