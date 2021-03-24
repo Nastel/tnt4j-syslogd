@@ -1,14 +1,14 @@
 # tnt4j-syslogd
 Syslogd over TNT4J implementation
 
-Streaming Syslog over TNT4J 
+Streaming Syslog to jKoolCloud 
 ===============================
-Please follow these steps to stream syslog over TNT4J:
+JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
 
-* Configure `config/tnt4j.properties`, 
-	* Default configuration is under `com.jkoolcloud.jesl.net.syslogd` stanza.
+* Obtain jKoolCloud account. Edit `config/tnt4j.properties`, 
+	* Locate `com.jkoolcloud.jesl.net.syslogd` stanza and provide your API access token.
 * Run JESL syslogd `<home>/bin/jksysd > jksysd.json`. 
-	* By default JESL `jksysd` binds to TCP port `5140` and writes out JSON formatted syslog messages.
+	* By default JESL `jksysd` binds to TCP port `5140` and writes JSON formatted syslog messages.
 	* JSON output can be played back using `<home>/bin/jksys` utility.
 * Configure `syslog/rsyslog` to forward to JESL syslog daemon over TCP (`hostname` is where JESL `jksysd` is running)
 	* RFC 3164 (e.g. `*.* @@hostname:5140`)
