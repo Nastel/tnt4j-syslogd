@@ -2,7 +2,7 @@
 setlocal
 set RUNDIR=%~dp0
 
-set CLPATH=%RUNDIR%../tnt4j-syslogd.jar;%RUNDIR%../lib/*
+set CLPATH=%RUNDIR%../*;%RUNDIR%../lib/*
 set MAINCL=com.jkoolcloud.jesl.net.syslogd.SyslogSend
 java -classpath %CLPATH% %MAINCL% %*
 endlocal
