@@ -44,6 +44,8 @@
     <properties>
         <maven.build.timestamp.format>yyyyMMddHHmmss</maven.build.timestamp.format>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <project.resources.encoding>UTF-8</project.resources.encoding>
         <product.vendor>jKool, LLC</product.vendor>
 
         <project.java.version>1.8</project.java.version>
@@ -55,7 +57,7 @@
         <java.compiler.fork>false</java.compiler.fork>
 
         <release.deploy.name>${project.artifactId}</release.deploy.name>
-        <release.deploy.dir>../build/${release.deploy.name}</release.deploy.dir>
+        <release.deploy.dir>build/</release.deploy.dir>
         <release.deploy.finalName>${release.deploy.name}-${project.version}</release.deploy.finalName>
         <release.deploy.zip.assembly>src/assembly/zipDeployAssembly.xml</release.deploy.zip.assembly>
         <release.deploy.gz.assembly>src/assembly/gzDeployAssembly.xml</release.deploy.gz.assembly>
@@ -162,6 +164,14 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <version>3.2.0</version>
+                <configuration>
+                    <encoding>${project.resources.encoding}</encoding>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>3.2.1</version>
                 <executions>
@@ -224,6 +234,10 @@
                     <filesets>
                         <fileset>
                             <directory>${release.deploy.dir}</directory>
+                            <includes>
+                                <include>${release.deploy.finalName}/</include>
+                                <include>${release.deploy.finalName}.*</include>
+                            </includes>
                         </fileset>
                     </filesets>
                 </configuration>
