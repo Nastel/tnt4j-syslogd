@@ -1,6 +1,15 @@
 # tnt4j-syslogd
 Syslogd over TNT4J implementation
 
+Use Maven dependency:
+```xml
+    <dependency>
+        <groupId>com.jkoolcloud.jesl.net</groupId>
+        <artifactId>tnt4j-syslogd</artifactId>
+        <version>0.3.4</version>
+    </dependency>
+```
+
 Streaming Syslog to jKoolCloud 
 ===============================
 JESL includes Syslog Daemon implementation. Please follow these steps to stream syslog to `jkoolcloud.com`:
