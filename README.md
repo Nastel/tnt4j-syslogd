@@ -55,12 +55,12 @@ Please use JCenter or Maven and dependencies will be downloaded automatically.
 
 # Building
 
-* To build the project, run maven goals `clean package`
-* To build the project and install to local repo, run maven goals `clean install`
+* To build the project, run Maven goals `clean package`
+* To build the project and install to local repo, run Maven goals `clean install`
 * To make distributable release assemblies use one of profiles: `pack-bin` or `pack-all`:
     * containing only binary (including `test` package) distribution: run `mvn -P pack-bin`
     * containing binary (including `test` package), `source` and `javadoc` distribution: run `mvn -P pack-all`
-* To make maven required `source` and `javadoc` packages, use profile `pack-maven`
-* To make maven central compliant release having `source`, `javadoc` and all signed packages, use `maven-release` profile
+* To make Maven required `source` and `javadoc` packages, use profile `pack-maven`
+* To make Maven central compliant release having `source`, `javadoc` and all signed packages, use `maven-release` profile
 
 Release assemblies are built to `/build` directory.
